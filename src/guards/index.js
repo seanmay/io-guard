@@ -1,0 +1,12 @@
+"use strict";
+exports.__esModule = true;
+var isTypeof = function (type) { return function (x) { return typeof x === typeof type; }; };
+exports.isTypeof = isTypeof;
+var isString = isTypeof(String());
+exports.isString = isString;
+var isNumber = isTypeof(Number());
+exports.isNumber = isNumber;
+var isBoolean = isTypeof(Boolean());
+exports.isBoolean = isBoolean;
+var isArray = function (xs) { return Array.isArray(xs); };
+exports.isArray = isArray;

@@ -1,10 +1,11 @@
-const isTypeof = <T>(type: T) => (x: T): x is T => typeof x === typeof type;
+import { ValueTypeGuard } from "../types";
 
-const isNumber = isTypeof(Number());
+const isTypeof = <T>(type: T): ValueTypeGuard<T> => (x: T): x is T => typeof x === typeof type;
+
 const isString = isTypeof(String());
+const isNumber = isTypeof(Number());
 const isBoolean = isTypeof(Boolean());
 
-const isArray = (x: any[]): x is any[] => Array.isArray(x);
-const isFunction = (x: Function): x is Function => x instanceof Function;
+const isArray = <T>(xs: T[]): xs is T[] => Array.isArray(xs);
 
-export { isTypeof, isNumber, isString, isBoolean, isArray, isFunction };
+export { isString, isNumber, isBoolean, isArray, isTypeof };

@@ -1,34 +1,29 @@
-export interface TypeGuard<T> {
-  (x: ValueMap<T>): x is T;
-}
+import { ValidatorMap, ObjectTypeGuard, ValueMap, ValueTypeGuard, IterableTypeGuard, ArrayTypeGuard } from "./types";
 
-export interface TypedTest<T> {
-  (x: T): any;
-}
 
-export type ValidatorMap<T> = { [key in keyof T]: TypeGuard<T[key]> };
-
-export type ValueMap<T> = { [key in keyof T]: T[key] };
-
-const Guard = <T>(validators: ValidatorMap<T>): TypeGuard<T> => (
+const Guard = <T>(validators: ValidatorMap<T>): ObjectTypeGuard<T> => (
   values: ValueMap<T>
 ): values is T => {
   for (const key in validators) {
     const test = validators[key];
     const value = values[key];
-    if (value == null || !test(value)) return false;
+    if (!test(value)) return false;
     else continue;
   }
   return true;
 };
 
-export { Guard };
+const GuardEach = <T>(
+  test: ValueTypeGuard<T>
+): ArrayTypeGuard<T> => (values): values is T[] => {
+  for (const value of values) {
+    if (!test(value)) return false;
+    else continue;
+  }
+  return true;
+};
 
-export {
-  isNumber,
-  isString,
-  isBoolean,
-  isFunction,
-  isArray
-} from "./guards/index";
+export { Guard, GuardEach };
+
+export { isNumber, isString, isBoolean, isArray } from "./guards/index";
 export { compose, and, or, optional } from "./operators/index";

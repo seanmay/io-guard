@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "strict": true,
-    "module": "es6",
-    "target": "esnext"
+    "module": "es2015",
+    "target": "esnext",
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "build"
   }
 }
