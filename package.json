@@ -1,13 +1,13 @@
 {
   "name": "io-guard",
-  "version": "0.1.1",
-  "main": "build/index.js",
+  "version": "0.1.2",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "build": "tsc --strict --outDir build -d --sourceMap src/index.ts"
+    "build": "tsc --strict --outDir dist -d --sourceMap src/index.ts"
   },
-  "types": "build/index.d.ts",
   "devDependencies": {
     "@types/jest": "^23.1.4",
     "jest": "^23.3.0",
