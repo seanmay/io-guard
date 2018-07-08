@@ -1,6 +1,6 @@
 {
   "name": "io-guard",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "main": "./bundle.common.js",
   "module": "./bundle.es6.mjs",
   "types": "./dist/index.d.ts",
