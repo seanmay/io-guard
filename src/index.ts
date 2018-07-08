@@ -26,4 +26,4 @@ const GuardEach = <T>(
 export { Guard, GuardEach };
 
 export { isNumber, isString, isBoolean, isArray } from "./guards/index";
-export { compose, and, or, optional } from "./operators/index";
+export { compose, and, or, optional, nullable, erratic } from "./operators/index";

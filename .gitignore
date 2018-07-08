@@ -1,5 +1,7 @@
 yarn-*.log
 node_modules
-dist
 coverage
+dist
 build
+.cache
+bundle.*

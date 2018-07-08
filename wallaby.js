@@ -14,6 +14,13 @@ module.exports = function (wallaby) {
     },
     testFramework: 'jest',
     debug: false,
+  
+    compilers: {
+      '**/*.ts?(x)': wallaby.compilers.typeScript({
+        module: 'commonjs',
+        jsx: 'React'
+      })
+    },
 
     setup: function (wallaby) {
       var jestConfig = require('./package.json').jest;

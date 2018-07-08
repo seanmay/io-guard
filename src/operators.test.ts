@@ -1,4 +1,4 @@
-import { optional, and, or, compose } from "./operators/index";
+import { optional, nullable, erratic, and, or, compose } from "./operators/index";
 
 describe("[Operators] optional", () => {
   it("runs the test function, if given a value", () => {
@@ -7,10 +7,41 @@ describe("[Operators] optional", () => {
     expect(test(2)).toBe(false);
   });
 
-  it("returns true if the passed value is null or undefined", () => {
+  it("returns true if the passed value is undefined, and false if the value is null", () => {
     const test = optional((x: number) => x === 1);
     expect(test(2)).toBe(false);
+    expect(test(null)).toBe(false);
+    expect(test(undefined)).toBe(true);
+  });
+});
+
+describe("[Operators] nullable", () => {
+  it("runs the test function, if given a value", () => {
+    const test = nullable((x: number) => x === 1);
+    expect(test(1)).toBe(true);
+    expect(test(2)).toBe(false);
+  });
+
+  it("returns true if the passed value is null, and false if the value is undefined", () => {
+    const test = nullable((x: number) => x === 1);
+    expect(test(2)).toBe(false);
     expect(test(null)).toBe(true);
+    expect(test(undefined)).toBe(false);
+  });
+});
+
+describe("[Operators] erratic", () => {
+  it("runs the test function, if given a value", () => {
+    const test = erratic((x: number) => x === 1);
+    expect(test(1)).toBe(true);
+    expect(test(2)).toBe(false);
+  });
+
+  it("returns true if the passed value is null or undefined", () => {
+    const test = erratic((x: number) => x === 1);
+    expect(test(2)).toBe(false);
+    expect(test(null)).toBe(true);
+    expect(test(undefined)).toBe(true);
   });
 });
 
@@ -34,7 +65,7 @@ describe("[Operators] and", () => {
     expect(suite1(input3)).toBe(false);
     expect(suite1(input4)).toBe(false);
     expect(suite1(input5)).toBe(false);
-  
+
     expect(suite2(input1)).toBe(false);
     expect(suite2(input2)).toBe(true);
     expect(suite2(input3)).toBe(true);

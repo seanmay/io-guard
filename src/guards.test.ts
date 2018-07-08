@@ -39,7 +39,7 @@ describe("GuardEach", () => {
 
     const isCrewMember = (x: CrewMember): x is CrewMember =>
       x.posting === "Enterprise";
-      
+
     const isCrew = GuardEach(isCrewMember);
 
     const crew1 = [
@@ -49,7 +49,7 @@ describe("GuardEach", () => {
 
     const crew2 = [
       { name: "Picard", role: "captain", posting: "Enterprise" },
-      { name: "Q", role: "foil", posting: "Q-continuum" }
+      { name: "Q", role: "foil", posting: "Q-Continuum" }
     ];
 
     expect(isCrew(crew1)).toBe(true);

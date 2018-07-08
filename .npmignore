@@ -1,0 +1,6 @@
+coverage
+.circleci
+.gitignore
+rollup.config.js
+wallaby.js
+tsconfig.*

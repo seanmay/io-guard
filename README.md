@@ -110,10 +110,46 @@ const isPerson = Guard<Person>({
 
 Coming Soon
 
-`Guard` and `GuardEach` are the star attractions.
-Other players are
+`Guard` and `GuardEach` are the star attractions.  
 
-- `and(...test[])`
-- `or(...test[])`
-- `compose(...test[])`
-- `optional(test)`,
+As a simplification of what is happening, under the hood:
+
+`Guard` takes some `{ [k:string]: (y: T[k]) => y is T[k] }`, and returns `x is T` for the object passed in.  
+`GuardEach` takes a `(x:T[]) => x is T[]` and returns `x is T[]` for the array passed in.  
+
+Other composition operators are
+
+- `and<T>(...test[])` -- (does **everything** pass; quick failure)
+- `or<T>(...test[])` -- (does **anything** pass; quick success)
+- `compose<T>(...test[])` -- (alias for `and`)
+
+Each of the above take regular functions `(x: whatever) => any`, and return `x is T` (so each of these is a valid typeguard, itself).
+
+All of the above *require the value to exist and to be non-null*! If they receive `undefined` or `null`, they will immediately fail, without ever running their tests.  
+That prevents you from running tests that end in crashing your JS with `can't access property ___ of null`. That&rsquo;s a good thing. But databases and SOAP APIs and `localStorage` are not so kind.
+
+So below are the operators for opting into flaky behaviour:
+
+- `optional<T>(test)` -- (**if** this thing is defined, does it pass)
+- `nullable<T>(test)` -- (**if** this thing is not null, does it pass)
+- `erratic<T>(test)` -- (**if** this thing is defined **and** is not null, does it pass)
+
+You might use them like
+
+```ts
+const isValidDepartmentInput = Guard<ErraticDepartmentAPIResponse>({
+  // sometimes disappears
+  departmentIsActive: optional(isBoolean),
+  // null if you are a manager
+  departmentManagerID: nullable(and(isString, isUUIDFormat)),
+  // undefined if it was never set (legacy department); null if it was unset
+  employeeMoraleImprovementPlan: erratic(isValidImprovementPlan)
+});
+```
+
+There are also included typeguards for basic JS types:
+
+- `isString (x): x is string`
+- `isNumber (x): x is number`
+- `isBoolean (x): x is boolean`
+- `isArray <T>(x: T[]): x is Array<T>`

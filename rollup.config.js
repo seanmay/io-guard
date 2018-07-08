@@ -2,18 +2,20 @@ import typescript from "rollup-typescript";
 import sourcemaps from "rollup-plugin-sourcemaps";
 export default [
   {
-    input: "build/index.ts",
+    input: __dirname + "/dist/index.js",
     output: {
       file: "bundle.common.js",
-      format: "cjs"
+      format: "cjs",
+      sourcemap: true,
     },
     plugins: [sourcemaps()]
   },
   {
-    input: "build/index.ts",
+    input: __dirname + "/dist/index.js",
     output: {
       file: "bundle.es6.mjs",
-      format: "es"
+      format: "es",
+      sourcemap: true,
     },
     plugins: [sourcemaps()]
   }
