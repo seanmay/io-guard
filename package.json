@@ -41,6 +41,5 @@
       "js"
     ],
     "collectCoverage": true
-  },
-  "dependencies": {}
+  }
 }
