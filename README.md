@@ -80,6 +80,11 @@ export const getContrivedExample = id =>
                 : Promise.reject(res)));
 ```
 
+#### Type Guards
+This library&rsquo;s type safety is provided by [TypeScript&rsquo;s type guard mechanism](https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types). Specifically, through the `<T>(x:any): x is T => {/*...*/}` format [demonstrated in the User-Defined section](https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards). Note that the runtime component offers basically the same benefits in JavaScript as in TypeScript; the addition of the type guards is merely for the benefit of having the compiler ensure that you have checked your inputs.
+
+#### Nesting
+
 This should work trivially on nested structures. Should. Though it does no work, whatsoever, to protect against circular references.
 
 ```ts
@@ -106,9 +111,47 @@ const isPerson = Guard<Person>({
 });
 ```
 
-### API
+#### Consistency of Payload
 
-Coming Soon
+It is expected that if you are writing a guard for an object that **all** keys are **always** available. The guard for each member on an object will be run. Any values which return `null` or `undefined` at the time of value lookup will return `false` and fail the test, which will cause the outer guard to fail, and so on, up the tree.
+
+I am sure your API is more than up to the challenge, but in the off chance that you have values that you find yourself saying "If x is defined, and x is not null, is x ___?" (either on load of data, or all the way through your app), then you can opt into telling the guard that the test can still pass, if the field is missing, or null.
+
+They are treated separately because sometimes, in some APIs, `null` values have some special meaning, which is held apart from `undefined`. The point of type guarding input and providing the means to close your system is that as long as you are diligent, you no longer have to test and guess inside of your system, if you know your boundaries are protected. Therefore, opt-in function wrappers have been provided.
+
+```ts
+type MessyInput = {
+  x: number;
+  y: number | null;
+  z?: number;
+  w?: number | null;
+};
+
+const isValidInput = Guard<MessyInput>({
+  x: isNumber,
+  y: nullable(isNumber), // I can be null
+  z: optional(isNumber), // I can be undefined
+  w: erratic(isNumber)   // I can be either
+});
+```
+The point is to be honest with the compiler.  
+If you want to declare a `Point2D` a `Point3D` and `Vector4D` types, you don&rsquo;t want to have to handle nulls and undefineds everywhere, so instead, if you have valid input (that being input you know how to turn into valid types), do so.
+
+An example might be:
+
+```ts
+const flakyInput = { x: 1, y: null };
+if (isValidInput(flakyInput)) {
+  // I can use this input to make a Point
+  return Point(
+    flakyInput.x      // this is guaranteed to be a number
+    flakyInput.y || 0 // this might be null; my points aren&rsquo;t nullable
+  );
+}
+```
+
+
+### API
 
 `Guard` and `GuardEach` are the star attractions.  
 
@@ -123,10 +166,7 @@ Other composition operators are
 - `or<T>(...test[])` -- (does **anything** pass; quick success)
 - `compose<T>(...test[])` -- (alias for `and`)
 
-Each of the above take regular functions `(x: whatever) => any`, and return `x is T` (so each of these is a valid typeguard, itself).
-
-All of the above *require the value to exist and to be non-null*! If they receive `undefined` or `null`, they will immediately fail, without ever running their tests.  
-That prevents you from running tests that end in crashing your JS with `can't access property ___ of null`. That&rsquo;s a good thing. But databases and SOAP APIs and `localStorage` are not so kind.
+Each of the above take regular functions `(x: whatever) => any`, and return `x is T` (so each of these is a valid type guard, itself).
 
 So below are the operators for opting into flaky behaviour:
 
@@ -134,7 +174,7 @@ So below are the operators for opting into flaky behaviour:
 - `nullable<T>(test)` -- (**if** this thing is not null, does it pass)
 - `erratic<T>(test)` -- (**if** this thing is defined **and** is not null, does it pass)
 
-You might use them like
+You might compose them like
 
 ```ts
 const isValidDepartmentInput = Guard<ErraticDepartmentAPIResponse>({
@@ -142,12 +182,12 @@ const isValidDepartmentInput = Guard<ErraticDepartmentAPIResponse>({
   departmentIsActive: optional(isBoolean),
   // null if you are a manager
   departmentManagerID: nullable(and(isString, isUUIDFormat)),
-  // undefined if it was never set (legacy department); null if it was unset
+  // undefined if it was never set (legacy); null if manually unset
   employeeMoraleImprovementPlan: erratic(isValidImprovementPlan)
 });
 ```
 
-There are also included typeguards for basic JS types:
+There are also included type guards for basic JS types:
 
 - `isString (x): x is string`
 - `isNumber (x): x is number`

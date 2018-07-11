@@ -4,6 +4,7 @@ import { ValidatorMap, ObjectTypeGuard, ValueMap, ValueTypeGuard, IterableTypeGu
 const Guard = <T>(validators: ValidatorMap<T>): ObjectTypeGuard<T> => (
   values: ValueMap<T>
 ): values is T => {
+  if (values == null) return false;
   for (const key in validators) {
     const test = validators[key];
     const value = values[key];
@@ -16,6 +17,7 @@ const Guard = <T>(validators: ValidatorMap<T>): ObjectTypeGuard<T> => (
 const GuardEach = <T>(
   test: ValueTypeGuard<T>
 ): ArrayTypeGuard<T> => (values): values is T[] => {
+  if (!Array.isArray(values)) return false;
   for (const value of values) {
     if (!test(value)) return false;
     else continue;
