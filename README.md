@@ -1,4 +1,4 @@
-# IO-Guard
+# IO-Guard [![CircleCI](https://circleci.com/gh/seanmay/io-guard/tree/master.svg?style=svg)](https://circleci.com/gh/seanmay/io-guard/tree/master) [![CodeFactor](https://www.codefactor.io/repository/github/seanmay/io-guard/badge)](https://www.codefactor.io/repository/github/seanmay/io-guard)
 
 A simple object validator which also supports TypeScript type guards, for the purpose of runtime and compile-time validation of foreign data.
 
