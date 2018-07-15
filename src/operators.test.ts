@@ -1,4 +1,13 @@
-import { optional, nullable, erratic, and, or, compose } from "./operators/index";
+import {
+  optional,
+  nullable,
+  erratic,
+  and,
+  or,
+  compose,
+  customTest,
+  unsafeTest
+} from "./operators/index";
 
 describe("[Operators] optional", () => {
   it("runs the test function, if given a value", () => {
@@ -98,5 +107,31 @@ describe("[Operators] or", () => {
 describe("[Operators] compose", () => {
   it("is an alias for `Operators.and`", () => {
     expect(compose).toBe(and);
+  });
+});
+
+describe("[Operators] customTest", () => {
+  it("will return truthy if the test returns a truthy value", () => {
+    expect(customTest(x => typeof x === "number")(5)).toBe(true);
+  });
+
+  it("will not throw on null or undefined", () => {
+    //@ts-ignore
+    const hasLength = customTest(x => !!x.length);
+    expect(hasLength("1")).toBe(true);
+    expect(hasLength(null)).toBe(false);
+  });
+});
+
+describe("[Operators] unsafeTest", () => {
+  it("will return truthy if the test returns a truthy value", () => {
+    const isNumber = unsafeTest(x => typeof x === "number");
+    expect(isNumber(5)).toBe(true);
+  });
+
+  it("will throw if null or undefined are unhandled", () => {
+    //@ts-ignore
+    const hasLength = unsafeTest(x => x.length);
+    expect(() => hasLength(null)).toThrow();
   });
 });
