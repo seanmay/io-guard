@@ -23,4 +23,10 @@ const erratic = <T>(test: TypedTest<T>) => (x: Erratic<T>): x is T =>
 
 const compose = and;
 
-export { compose, and, or, optional, nullable, erratic };
+const customTest = <T>(test: TypedTest<T>) => (x: Erratic<T>): x is T =>
+  isErratic(x) ? false : test(x);
+
+const unsafeTest = <T>(test: TypedTest<Erratic<T>>) => (x: Erratic<T>): x is T =>
+  test(x);
+
+export { compose, and, or, optional, nullable, erratic, customTest, unsafeTest };
