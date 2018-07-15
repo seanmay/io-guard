@@ -193,3 +193,11 @@ There are also included type guards for basic JS types:
 - `isNumber (x): x is number`
 - `isBoolean (x): x is boolean`
 - `isArray <T>(x: T[]): x is Array<T>`
+
+This API is intended to be very, very small. However, if you need an escape hatch, there are a couple available to you:
+
+- `customTest<T>(test)` -- this operator behaves like the others; it will return false, if you pass it `null` or `undefined`, does the type guard stuff for you, and other than that, lets you run any test you want
+
+- `unsafeTest<T>(test)` -- this operator is an escape that does nothing but provide the `x is T` type guard. If you do something wrong with `null` or `undefined`, it *will* explode spectacularly. You have been warned.
+
+- the ultimate escape hatch: `<T>(x: any): x is T => {}` -- when it comes down to it, this is what all of the guards and operators are, so you can write your own. Just remember that any member on a guard must return `x is T`, instead of `boolean` or `any`, otherwise the compiler is going to be very unhappy with you. This is not a problem for JS, of course. And once again, the library is not going to do anything to protect your raw type guard from mishandling the value passed. Caveat tester.
