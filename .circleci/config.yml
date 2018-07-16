@@ -2,15 +2,14 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
-version: 2
 
 defaults: &defaults
   working_directory: ~/repo
   docker:
     - image: circleci/node:10
 
+version: 2
 jobs:
-
   checkout:
     <<: *defaults
     steps:
@@ -57,9 +56,9 @@ jobs:
           name: Build Deliverable
           command: yarn build
 
-      - persist_to_workspace
-        root: ~/repo
-        paths: .
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
     
   deploy:
     <<: *defaults
