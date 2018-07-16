@@ -2,39 +2,131 @@
 #
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
+
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:10
+
 version: 2
 jobs:
-  build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:10
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
-
-    working_directory: ~/repo
-
+  checkout:
+    <<: *defaults
     steps:
       - checkout
-
-      # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-
-      - run: yarn install
+      - run:
+          name: Install Dependencies
+          command: yarn install
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+  
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
 
-      # run tests!
-      # - run: yarn test
-      - run: yarn test:ci
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
 
+      - run:
+          name: Run Tests
+          command: yarn test:ci
 
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+
+      - run:
+          name: Build Deliverable
+          command: yarn build
+
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+    
+  deploy:
+    <<: *defaults
+  
+    steps:
+      - attach_workspace:
+          at: ~/repo
+    
+      - run:
+          name: Write auth-token
+          command: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/repo/.npmrc
+    
+      - run:
+          name: Install dot-json
+          command: npm install dot-json
+
+      - run:
+          name: update version
+          command: $(yarn bin)/dot-json package.json version ${CIRCLE_TAG:1}
+
+      - run:
+          name: Publish Package
+          command: yarn publish
+
+workflows:
+  version: 2
+
+  build:
+    jobs:
+      - checkout
+      - test:
+          requires:
+            - checkout
+      - build:
+          requires:
+            - test
+
+  release:
+    jobs:
+      - checkout:
+          filters:
+            tags:
+              only: /^v[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+      - test:
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+          requires:
+            - checkout
+
+      - build:
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+          requires:
+            - test
+
+      - deploy:
+          filters:
+            tags:
+              only: /v[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+          requires:
+            - build
