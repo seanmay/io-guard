@@ -1,6 +1,6 @@
 import { Guard, GuardEach } from "./index";
-import { and } from "./operators/index";
-import { isString, isNumber } from "./guards/index";
+import { and } from "./operators/operators";
+import { isString } from "./guards/guards";
 
 describe("Guard", () => {
   it("takes an object of keys and validators, validates input with the same keys, and passes if every validator passes (short-ciruit on fail)", () => {
@@ -40,9 +40,9 @@ describe("Guard", () => {
       }
     };
 
-    // @ts-ignore
     const dent: User = {
       name: "Arthur Dent",
+      //@ts-ignore
       address: null
     };
 

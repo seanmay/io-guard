@@ -7,7 +7,7 @@ import {
   compose,
   customTest,
   unsafeTest
-} from "./operators/index";
+} from "./operators/operators";
 
 describe("[Operators] optional", () => {
   it("runs the test function, if given a value", () => {

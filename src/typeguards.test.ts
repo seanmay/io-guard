@@ -1,7 +1,7 @@
 import {
   isTypeof,
   isArray
-} from "./guards/index";
+} from "./guards/guards";
 
 describe("[Guards] isTypeof", () => {
   it("Provides a TypeGuard for a type, given input value, based on `typeof` checks", () => {
