@@ -75,7 +75,7 @@ jobs:
           name: Install dot-json
           command: npm install dot-json
 
-      -run:
+      - run:
           name: update version
           command: $(yarn bin)/dot-json package.json version ${CIRCLE_TAG:1}
 
