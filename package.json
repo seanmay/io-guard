@@ -18,11 +18,13 @@
   },
   "scripts": {
     "test": "jest",
+    "test:ci": "jest --coverage --coverageReporters=text-lcov | coveralls",
     "build": "tsc --strict --outDir dist -d --inlineSourceMap true --inlineSources --module es2015 src/index.ts && rollup -c"
   },
   "devDependencies": {
     "@types/jest": "^23.1.4",
     "babel-core": "^7.0.0-beta.3",
+    "coveralls": "^3.0.2",
     "jest": "^23.3.0",
     "rollup": "^0.62.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
