@@ -16,32 +16,47 @@
   "bugs": {
     "url": "https://github.com/seanmay/io-guard/issues"
   },
+  "homepage": "https://github.com/seanmay/io-guard",
   "scripts": {
     "test": "jest",
-    "test:ci": "jest --coverage --coverageReporters=text-lcov | coveralls",
+    "test:ci": "jest --coverage --ci --runInBand && codecov",
     "build": "tsc --strict --outDir dist -d --inlineSourceMap true --inlineSources --module es2015 src/index.ts && rollup -c"
   },
   "devDependencies": {
-    "@types/jest": "^23.1.4",
+    "@babel/core": "^7.0.0-beta.53",
+    "@types/jest": "22",
     "babel-core": "^7.0.0-beta.3",
-    "coveralls": "^3.0.2",
-    "jest": "^23.3.0",
+    "codecov": "^3.0.4",
+    "jest": "22",
     "rollup": "^0.62.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-typescript": "^1.1.2",
-    "ts-jest": "^23.0.0",
+    "ts-jest": "22",
     "typescript": "^2.9.2"
   },
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "\\.test\\.(ts|tsx)$",
+    "testRegex": "\\.test\\.tsx?$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
-      "js"
+      "js",
+      "jsx"
     ],
-    "collectCoverage": true
-  }
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ],
+    "coverageDirectory": "./coverage",
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 90,
+        "lines": 90,
+        "statements": 90
+      }
+    }
+  },
+  "dependencies": {}
 }
