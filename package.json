@@ -1,6 +1,6 @@
 {
   "name": "io-guard",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "main": "./bundle.common.js",
   "module": "./bundle.es6.mjs",
   "types": "./dist/index.d.ts",
@@ -27,6 +27,7 @@
     "@types/jest": "22",
     "babel-core": "^7.0.0-beta.3",
     "codecov": "^3.0.4",
+    "dot-json": "^1.0.4",
     "jest": "22",
     "rollup": "^0.62.0",
     "rollup-plugin-sourcemaps": "^0.4.2",

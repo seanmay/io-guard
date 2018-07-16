@@ -1,4 +1,4 @@
-import { ValidatorMap, ObjectTypeGuard, ValueMap, ValueTypeGuard, IterableTypeGuard, ArrayTypeGuard } from "./types";
+import { ValidatorMap, ObjectTypeGuard, ValueMap, ValueTypeGuard, ArrayTypeGuard } from "./types";
 
 
 const Guard = <T>(validators: ValidatorMap<T>): ObjectTypeGuard<T> => (
@@ -28,4 +28,4 @@ const GuardEach = <T>(
 export { Guard, GuardEach };
 
 export { isNumber, isString, isBoolean, isArray } from "./guards/guards";
-export { compose, and, or, optional, nullable, erratic } from "./operators/operators";
+export { compose, and, or, optional, nullable, erratic, unsafeTest, customTest } from "./operators/operators";
