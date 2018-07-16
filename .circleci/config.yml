@@ -81,7 +81,7 @@ jobs:
 
       - run:
           name: Publish Package
-          command: yarn publish
+          command: yarn publish --new-version ${CIRCLE_TAG:1}
 
 workflows:
   version: 2
