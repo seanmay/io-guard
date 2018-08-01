@@ -40,9 +40,9 @@ describe("Guard", () => {
       }
     };
 
+    //@ts-ignore
     const dent: User = {
       name: "Arthur Dent",
-      //@ts-ignore
       address: null
     };
 
