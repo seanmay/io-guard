@@ -1,13 +1,9 @@
 export interface ObjectTypeGuard<T> {
-  (x: ValueMap<T>): x is T;
-}
-
-export interface IterableTypeGuard<T> {
-  (xs: Iterable<T>): xs is Iterable<T>;
+  (x: any): x is T;
 }
 
 export interface ArrayTypeGuard<T> {
-  (xs: T[]): xs is T[];
+  (xs: any[]): xs is T[];
 }
 
 export interface ValueTypeGuard<T> {
