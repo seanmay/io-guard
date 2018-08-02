@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "io-guard": "^0.2.3"
+  },
+  "devDependencies": {
+    "typescript": "3.0.1"
+  }
+}
