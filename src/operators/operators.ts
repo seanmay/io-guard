@@ -26,7 +26,9 @@ const compose = and;
 const customTest = <T>(test: TypedTest<T>) => (x: Erratic<T>): x is T =>
   isErratic(x) ? false : test(x);
 
+const test = customTest;
+
 const unsafeTest = <T>(test: TypedTest<Erratic<T>>) => (x: Erratic<T>): x is T =>
   test(x);
 
-export { compose, and, or, optional, nullable, erratic, customTest, unsafeTest };
+export { compose, and, or, optional, nullable, erratic, customTest, test, unsafeTest };

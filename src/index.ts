@@ -28,4 +28,4 @@ const GuardEach = <T>(
 export { Guard, GuardEach };
 
 export { isNumber, isString, isBoolean, isArray } from "./guards/guards";
-export { compose, and, or, optional, nullable, erratic, unsafeTest, customTest } from "./operators/operators";
+export { compose, and, or, optional, nullable, erratic, customTest, test, unsafeTest } from "./operators/operators";
